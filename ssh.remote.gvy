@@ -1,0 +1,21 @@
+node {
+    def remote = [:]
+    remote.name = 'test'
+    remote.host = '44.201.148.91'
+    remote.user = 'ec2-user'
+    remote.password = 'p'
+    remote.allowAnyHosts = true
+    
+    stage('Connect_Remote') {
+        sshCommand remote: remote, command: "date"
+    }
+    stage('Update the Server') {
+        sshCommand remote: remote, command: "sudo yum update -y"
+    }
+    stage('Install the Web server') {
+        sshCommand remote: remote, command: "sudo yum install httpd -y"
+    }
+    stage('Starthttpd') {
+        sshCommand remote: remote, command: "sudo systemctl start httpd"
+    }
+}
